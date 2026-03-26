@@ -1,13 +1,23 @@
-import os
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from pydantic import BaseModel
 
 app = FastAPI()
 
+# 1. Создаем модель данных, которую ожидаем от пользователя
+class CalculationRequest(BaseModel):
+    num1: int
+    num2: int
+
+# 2. Создаем маршрут /calculate, который принимает POST-запрос
+@app.post("/calculate")
+async def calculate(data: CalculationRequest):
+    result = data.num1 + data.num2
+    return {"result": result}
+
+#  старый код для приветствия 
 @app.get("/")
-async def read_index():
-    path = os.path.join("templates", "index.html")
-    return FileResponse(path)
+async def read_root():
+    return {"message": "App is running!"}
 
 if __name__ == "__main__":
     import uvicorn
