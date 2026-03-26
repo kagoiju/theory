@@ -1,5 +1,12 @@
+# app.py
 from fastapi import FastAPI
 from pydantic import BaseModel
+from models import User  # Импортируем нашу модель из соседнего файла
+
+app = FastAPI()
+
+# Создаем экземпляр (объект) пользователя
+fake_user = User(name="John Doe", id=1)
 
 app = FastAPI()
 
@@ -18,6 +25,12 @@ async def calculate(data: CalculationRequest):
 @app.get("/")
 async def read_root():
     return {"message": "App is running!"}
+
+# 3. Новый маршрут /users
+@app.get("/users")
+async def get_user():
+    # Просто возвращаем объект, FastAPI сам превратит его в JSON
+    return fake_user
 
 if __name__ == "__main__":
     import uvicorn
