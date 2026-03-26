@@ -1,14 +1,25 @@
 # app.py
 from fastapi import FastAPI
 from pydantic import BaseModel
-from models import User  # Импортируем нашу модель из соседнего файла
+from models import User, Feedback  # Импортируем модели
 
 app = FastAPI()
 
 # Создаем экземпляр (объект) пользователя
 fake_user = User(name="John Doe", id=1)
 
+# База данных для отзывов
+fake_feedbacks = []
+
+# 4. фидбэк
 app = FastAPI()
+@app.post("/feedback")
+async def send_feedback(feed: Feedback):
+    # 1. Сохраняем полученный отзыв в наш список
+    fake_feedbacks.append({"name": feed.name, "message": feed.message})
+    
+    # 2. Возвращаем ответ по шаблону из задания
+    return {"message": f"Feedback received. Thank you, {feed.name}."}
 
 # 1. Создаем модель данных, которую ожидаем от пользователя
 class CalculationRequest(BaseModel):
